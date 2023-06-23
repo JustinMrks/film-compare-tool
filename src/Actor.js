@@ -7,12 +7,12 @@ const Actor = ({ actState, setActState, fetchMovies, common, setCommon }) => {
 
   const handleChange = (e) => {
     setActor(e.target.value);
+    setCommon();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchMovies(setActState, actor, setLoading);
-    setCommon();
   };
 
   return (
