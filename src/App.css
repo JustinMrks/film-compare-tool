@@ -1,6 +1,9 @@
-/* * {
+*,
+*::before,
+*::after {
   outline: 1px solid red;
-} */
+  box-sizing: border-box;
+}
 
 .App {
   display: flex;
@@ -29,6 +32,7 @@
 }
 
 .poster {
-  height: auto;
-  width: 200px;
+  height: 450px;
+  width: 300px;
+  background: rgb(186, 224, 229);
 }

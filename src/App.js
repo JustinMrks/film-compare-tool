@@ -8,6 +8,7 @@ function App() {
   const [act1, setAct1] = useState();
   const [act2, setAct2] = useState();
   const [errMsg, setErrMsg] = useState('');
+  const [common, setCommon] = useState();
 
   //options for the fetch to allow us to hit the proper endpoints
   const options = {
@@ -31,8 +32,7 @@ function App() {
             //extracting only the information we need from the api
             title: item.title,
             overview: item.overview,
-            character: item.character,
-            img: `https://image.tmdb.org/t/p/w300_and_h450_bestv2${item.poster_path}`,
+            img: item.poster_path,
           };
         });
         setActFunction({ actor: actorName, movies: [...dataArray] });
@@ -40,10 +40,24 @@ function App() {
       .catch((err) => setErrMsg(err));
   };
 
+  const compare = () => {
+    if (act1 && act2) {
+      let compArr = act1.movies.filter((x) =>
+        act2.movies.some((y) => x.title === y.title)
+      );
+      console.log(compArr);
+      setErrMsg();
+    } else {
+      setErrMsg('Need to have two actors to compare!');
+    }
+  };
+
   return (
     <div className="App">
       <Actor actState={act1} setActState={setAct1} fetchMovies={fetchMovies} />
-      <button className="compare-button">Compare</button>
+      <button className="compare-button" onClick={compare}>
+        Compare
+      </button>
       <Actor actState={act2} setActState={setAct2} fetchMovies={fetchMovies} />
     </div>
   );
