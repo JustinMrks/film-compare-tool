@@ -12,8 +12,10 @@ const MovieCard = ({ movie }) => {
       ) : (
         <div className="poster">{movie.title}</div>
       )}
-
-      <h1> {movie.title} </h1>
+      <div className="card-text">
+        <h1> {movie.title} </h1>
+        <p> {movie.overview} </p>
+      </div>
     </div>
   );
 };

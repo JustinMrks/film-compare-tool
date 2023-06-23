@@ -3,6 +3,7 @@ import './App.css';
 import { useState } from 'react';
 
 import Actor from './Actor';
+import MovieCard from './MovieCard';
 
 function App() {
   const [act1, setAct1] = useState();
@@ -20,7 +21,8 @@ function App() {
   };
 
   //function to fetch the filmography and add it to state
-  const fetchMovies = (setActFunction, actorName) => {
+  const fetchMovies = (setActFunction, actorName, setLoading) => {
+    setLoading(true);
     axios
       .get(
         `https://actor-movie-api1.p.rapidapi.com/getid/${actorName}`,
@@ -36,8 +38,12 @@ function App() {
           };
         });
         setActFunction({ actor: actorName, movies: [...dataArray] });
+        setLoading(false);
       })
-      .catch((err) => setErrMsg(err));
+      .catch((err) => {
+        setErrMsg(err);
+        setLoading(false);
+      });
   };
 
   const compare = () => {
@@ -45,6 +51,7 @@ function App() {
       let compArr = act1.movies.filter((x) =>
         act2.movies.some((y) => x.title === y.title)
       );
+      setCommon(compArr);
       console.log(compArr);
       setErrMsg();
     } else {
@@ -54,11 +61,43 @@ function App() {
 
   return (
     <div className="App">
-      <Actor actState={act1} setActState={setAct1} fetchMovies={fetchMovies} />
-      <button className="compare-button" onClick={compare}>
-        Compare
-      </button>
-      <Actor actState={act2} setActState={setAct2} fetchMovies={fetchMovies} />
+      <section className="upper">
+        <Actor
+          actState={act1}
+          setActState={setAct1}
+          fetchMovies={fetchMovies}
+          common={common}
+          setCommon={setCommon}
+        />
+        {!common ? (
+          <button className="compare-button" onClick={compare}>
+            Compare
+          </button>
+        ) : (
+          <></>
+        )}
+
+        <Actor
+          actState={act2}
+          setActState={setAct2}
+          fetchMovies={fetchMovies}
+          common={common}
+          setCommon={setCommon}
+        />
+      </section>
+      {common ? (
+        <section className="lower">
+          {common.length === 0 ? (
+            <h1> They dont share any movies </h1>
+          ) : (
+            common.map((movie, index) => (
+              <MovieCard key={index} movie={movie} />
+            ))
+          )}
+        </section>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
