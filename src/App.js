@@ -1,6 +1,6 @@
 import axios from 'axios';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Actor from './Actor';
 import MovieCard from './MovieCard';
@@ -10,6 +10,10 @@ function App() {
   const [act2, setAct2] = useState();
   const [errMsg, setErrMsg] = useState('');
   const [common, setCommon] = useState();
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [act1, act2, common]);
 
   //options for the fetch to allow us to hit the proper endpoints
   const options = {
@@ -23,6 +27,7 @@ function App() {
   //function to fetch the filmography and add it to state
   const fetchMovies = (setActFunction, actorName, setLoading) => {
     setLoading(true);
+    setErrMsg();
     axios
       .get(
         `https://actor-movie-api1.p.rapidapi.com/getid/${actorName}`,
@@ -41,7 +46,7 @@ function App() {
         setLoading(false);
       })
       .catch((err) => {
-        setErrMsg(err);
+        setErrMsg(`Couldn't find any actors with the name "${actorName}"`);
         setLoading(false);
       });
   };
@@ -52,7 +57,6 @@ function App() {
         act2.movies.some((y) => x.title === y.title)
       );
       setCommon(compArr);
-      console.log(compArr);
       setErrMsg();
     } else {
       setErrMsg('Need to have two actors to compare!');
@@ -70,9 +74,12 @@ function App() {
           setCommon={setCommon}
         />
         {!common ? (
-          <button className="compare-button" onClick={compare}>
-            Compare
-          </button>
+          <div className="center">
+            <button className="compare-button" onClick={compare}>
+              Compare
+            </button>
+            <p className="err-msg">{errMsg}</p>
+          </div>
         ) : (
           <></>
         )}
@@ -88,7 +95,7 @@ function App() {
       {common ? (
         <section className="lower">
           {common.length === 0 ? (
-            <h1> They dont share any movies </h1>
+            <h1> No shared movies! </h1>
           ) : (
             common.map((movie, index) => (
               <MovieCard key={index} movie={movie} />
