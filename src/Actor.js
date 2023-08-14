@@ -19,10 +19,12 @@ const Actor = ({ actState, setActState, fetchMovies, common, setCommon }) => {
 
   return (
     <div className="actor-container">
-      <form>
-        <input type="text" value={actor} onChange={handleChange} />
-        <button onClick={handleSubmit}>Search</button>
-      </form>
+      <div className="name-form">
+        <form>
+          <input type="text" value={actor} onChange={handleChange} />
+          <button onClick={handleSubmit}>Search</button>
+        </form>
+      </div>
       {!loading ? (
         actState && !common ? (
           actState.movies.map((movie, index) => (

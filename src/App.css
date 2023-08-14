@@ -9,7 +9,27 @@
   display: flex;
 }
 
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
 .lower {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.name-form {
+  display: flex;
+  min-width: 400px;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+.name-form > form {
   display: flex;
 }
 
@@ -46,4 +66,5 @@
 .card-text {
   color: white;
   width: auto;
+  max-width: 600px;
 }
